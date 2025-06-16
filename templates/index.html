@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Подарки</title>
+    <script src="https://telegram.org/js/telegram-webapp.js"></script> 
+</head>
+<body>
+    <h1>Выберите подарок</h1>
+    <button onclick="sendGift('teddy_bear')">🧸 Медвежонок</button>
+    <button onclick="sendGift('flower')">🌸 Цветок</button>
+    <button onclick="sendGift('cake')">🍰 Торт</button>
+
+    <script>
+        Telegram.WebApp.ready();
+
+        function sendGift(giftType) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('user_id');
+
+            if (!userId) {
+                alert("Не найден ID пользователя");
+                return;
+            }
+
+            fetch(`https://yourdomain.com/api/send_gift?user_id=${userId}&gift=${giftType}`)
+                .then(res => res.json())
+                .then(data => {
+                    alert("Подарок отправлен!");
+                    Telegram.WebApp.close();
+                })
+                .catch(err => {
+                    alert("Ошибка отправки подарка.");
+                    console.error(err);
+                });
+        }
+    </script>
+</body>
+</html>
